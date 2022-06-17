@@ -6,17 +6,30 @@ const createBook = async function (req, res) {
     try {
         let data = req.body
         console.log(data)
-        if ( Object.keys(data).length != 0) {
+        if (Object.keys(data).length != 0) {
             let savedData = await BookModel.create(data)
             res.status(201).send({ msg: savedData })
         }
-        else res.status(400).send({ msg: "BAD REQUEST"})
+        else res.status(400).send({ msg: "BAD REQUEST" })
     }
     catch (err) {
         console.log("This is the error :", err.message)
         res.status(500).send({ msg: "Error", error: err.message })
     }
 }
+
+const getBooksData = async function (req, res) {
+    try {
+        let allBooks = await BookModel.find({ authorName: "HO" })
+        console.log(allBooks)
+        if (allBooks.length > 0) res.send({ msg: allBooks, condition: true })
+        else res.send({ msg: "No books found", condition: false })
+    }
+    catch (error) {
+
+    }
+}
+
 
 // TRY CATCH SUMMARY:
 // if you get an error in try block, it will not execute the next lines of code inside try
@@ -59,12 +72,6 @@ const createBook = async function (req, res) {
 
 
 
-const getBooksData = async function (req, res) {
-    let allBooks = await BookModel.find({ authorName: "HO" })
-    console.log(allBooks)
-    if (allBooks.length > 0) res.send({ msg: allBooks, condition: true })
-    else res.send({ msg: "No books found", condition: false })
-}
 
 
 const updateBooks = async function (req, res) {
